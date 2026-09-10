@@ -62,6 +62,17 @@ and file the new memory under "its key, plus whatever that key already points
 to." In symbols, the write address becomes `k + M·k` instead of just `k`. The
 hope is that this small change lets a chain form on its own as the layer writes.
 
+```mermaid
+flowchart LR
+    k[new key k] --> A["look k up in memory M"]
+    A --> P["write address = k + what M returned"]
+    k --> P
+    P --> W["store the new fact at that address in M"]
+```
+
+*Folding a lookup into the write address is what lets a freshly written fact
+chain onto one already in memory.*
+
 **What actually happened.** It works, but only sometimes, and I can prove what
 makes it work.
 
@@ -103,6 +114,14 @@ chain forms during writing, I just *build the chaining into the read*?
 in a row within the same layer: look up the query, take what comes back, look
 *that* up, and so on, once per hop. Between hops, snap the intermediate result
 onto the nearest real token ("cleanup"), so noise does not pile up across hops.
+
+```mermaid
+flowchart LR
+    q[query] --> r1["read from M"] --> c1["snap to nearest token"] --> r2["read from M"] --> c2["snap to nearest token"] --> a[answer]
+```
+
+*The read runs several times inside one layer, cleaning up between hops, so a
+single query can follow a chain of facts.*
 
 I want to be upfront about where this sits. This is **not** a brand-new
 mechanism. Reading a fast-weight memory several times inside one layer, with a
