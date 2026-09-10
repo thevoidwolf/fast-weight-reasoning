@@ -1,0 +1,28 @@
+{
+  "seed": 0,
+  "train_steps": 12000,
+  "freki2_on_2hop": {
+    "k1": 1.0,
+    "k2": 1.0,
+    "k3": 0.9970703125,
+    "k4": 0.9951171875
+  },
+  "freki3_transferred_on_2hop": {
+    "k1": 0.0166015625,
+    "k2": 0.0029296875,
+    "k3": 0.001953125,
+    "k4": 0.0
+  },
+  "freki3_zero_shot_on_3hop": {
+    "k1": 0.0,
+    "k2": 0.0,
+    "k3": 0.0,
+    "k4": 0.0
+  },
+  "params_copied_count": 42,
+  "params_skipped": [
+    "blocks.0.mixer.chain_norms.2.weight",
+    "blocks.1.mixer.chain_norms.2.weight",
+    "blocks.2.mixer.chain_norms.2.weight"
+  ]
+}

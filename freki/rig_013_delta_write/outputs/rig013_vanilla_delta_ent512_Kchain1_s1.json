@@ -1,0 +1,482 @@
+{
+  "tag": "rig013_vanilla_delta_ent512_Kchain1_s1",
+  "rig": "rig013_delta_write",
+  "seed": 1,
+  "params": 2191299,
+  "cfg": {
+    "K1": 4,
+    "K2": 4,
+    "steps": 12000,
+    "batch": 64,
+    "lr": 0.0003,
+    "lr_floor": 3e-05,
+    "warmup": 200,
+    "weight_decay": 0.01,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "grad_clip": 1.0,
+    "mode": "mixed",
+    "eval_every": 500,
+    "eval_batches": 2,
+    "eval_batch_size": 256,
+    "device": "cuda",
+    "autocast": true,
+    "pad_seq_to": 0,
+    "hops": 3,
+    "K3": 4,
+    "K4": 4,
+    "eval_K1_max": 0
+  },
+  "aux": {
+    "style": "shared_bus_cleanup_plus_sym_aux",
+    "layer": 0,
+    "lambda_init": 0.0,
+    "sym_lambda_init": 0.0,
+    "decay_tau": 4000.0,
+    "T_init": 5.0,
+    "T_final": 1.0,
+    "contrastive": true
+  },
+  "curriculum": {
+    "warm_id_steps": 0,
+    "anneal_steps": 0
+  },
+  "vocab_size": 647,
+  "train_tasks": [
+    [
+      1,
+      4
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      4
+    ]
+  ],
+  "final_acc": {
+    "k1": 0.2578125,
+    "k2": 0.25,
+    "k3": 0.236328125,
+    "k4": 0.2421875
+  },
+  "wallclock_s": 2299.673,
+  "curve": [
+    {
+      "step": 500,
+      "loss": 2.598846435546875,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 4.833652804400367,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.25390625,
+        "k2": 0.26953125,
+        "k3": 0.232421875,
+        "k4": 0.236328125
+      }
+    },
+    {
+      "step": 1000,
+      "loss": 2.3650131225585938,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 4.6669722476873075,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.265625,
+        "k2": 0.265625,
+        "k3": 0.271484375,
+        "k4": 0.23828125
+      }
+    },
+    {
+      "step": 1500,
+      "loss": 1.9261164665222168,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 4.500291690974247,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.2265625,
+        "k2": 0.275390625,
+        "k3": 0.271484375,
+        "k4": 0.23828125
+      }
+    },
+    {
+      "step": 2000,
+      "loss": 2.3330535888671875,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 4.333611134261188,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.28515625,
+        "k2": 0.2890625,
+        "k3": 0.255859375,
+        "k4": 0.25390625
+      }
+    },
+    {
+      "step": 2500,
+      "loss": 2.0651559829711914,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 4.166930577548129,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.283203125,
+        "k2": 0.271484375,
+        "k3": 0.25390625,
+        "k4": 0.25390625
+      }
+    },
+    {
+      "step": 3000,
+      "loss": 1.9225330352783203,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 4.00025002083507,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.28125,
+        "k2": 0.2734375,
+        "k3": 0.2890625,
+        "k4": 0.271484375
+      }
+    },
+    {
+      "step": 3500,
+      "loss": 1.913116455078125,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 3.83356946412201,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.265625,
+        "k2": 0.26953125,
+        "k3": 0.25390625,
+        "k4": 0.2734375
+      }
+    },
+    {
+      "step": 4000,
+      "loss": 1.9878921508789062,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 3.666888907408951,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.267578125,
+        "k2": 0.30078125,
+        "k3": 0.26171875,
+        "k4": 0.236328125
+      }
+    },
+    {
+      "step": 4500,
+      "loss": 2.075359344482422,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 3.5002083506958916,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.275390625,
+        "k2": 0.265625,
+        "k3": 0.248046875,
+        "k4": 0.255859375
+      }
+    },
+    {
+      "step": 5000,
+      "loss": 1.7830810546875,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 3.3335277939828316,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.23046875,
+        "k2": 0.279296875,
+        "k3": 0.26953125,
+        "k4": 0.271484375
+      }
+    },
+    {
+      "step": 5500,
+      "loss": 1.853118896484375,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 3.1668472372697725,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.2578125,
+        "k2": 0.263671875,
+        "k3": 0.25,
+        "k4": 0.259765625
+      }
+    },
+    {
+      "step": 6000,
+      "loss": 1.8020477294921875,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 3.0001666805567133,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.259765625,
+        "k2": 0.27734375,
+        "k3": 0.2890625,
+        "k4": 0.244140625
+      }
+    },
+    {
+      "step": 6500,
+      "loss": 1.786376953125,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 2.8334861238436537,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.27734375,
+        "k2": 0.265625,
+        "k3": 0.279296875,
+        "k4": 0.25
+      }
+    },
+    {
+      "step": 7000,
+      "loss": 1.6526298522949219,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 2.666805567130594,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.248046875,
+        "k2": 0.2890625,
+        "k3": 0.271484375,
+        "k4": 0.259765625
+      }
+    },
+    {
+      "step": 7500,
+      "loss": 1.772674560546875,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 2.500125010417535,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.244140625,
+        "k2": 0.2890625,
+        "k3": 0.259765625,
+        "k4": 0.279296875
+      }
+    },
+    {
+      "step": 8000,
+      "loss": 1.6888427734375,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 2.3334444537044754,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.26953125,
+        "k2": 0.26953125,
+        "k3": 0.22265625,
+        "k4": 0.271484375
+      }
+    },
+    {
+      "step": 8500,
+      "loss": 1.60308837890625,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 2.166763896991416,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.28515625,
+        "k2": 0.26953125,
+        "k3": 0.220703125,
+        "k4": 0.263671875
+      }
+    },
+    {
+      "step": 9000,
+      "loss": 1.6297411918640137,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 2.0000833402783567,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.251953125,
+        "k2": 0.265625,
+        "k3": 0.255859375,
+        "k4": 0.232421875
+      }
+    },
+    {
+      "step": 9500,
+      "loss": 1.6509819030761719,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 1.833402783565297,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.2578125,
+        "k2": 0.26953125,
+        "k3": 0.2734375,
+        "k4": 0.26953125
+      }
+    },
+    {
+      "step": 10000,
+      "loss": 1.57979154586792,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 1.6667222268522375,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.251953125,
+        "k2": 0.27734375,
+        "k3": 0.25390625,
+        "k4": 0.25390625
+      }
+    },
+    {
+      "step": 10500,
+      "loss": 1.4940338134765625,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 1.5000416701391783,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.255859375,
+        "k2": 0.271484375,
+        "k3": 0.248046875,
+        "k4": 0.271484375
+      }
+    },
+    {
+      "step": 11000,
+      "loss": 1.4578399658203125,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 1.3333611134261187,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.279296875,
+        "k2": 0.25390625,
+        "k3": 0.283203125,
+        "k4": 0.25
+      }
+    },
+    {
+      "step": 11500,
+      "loss": 1.81964111328125,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 1.1666805567130596,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.2578125,
+        "k2": 0.2734375,
+        "k3": 0.234375,
+        "k4": 0.25
+      }
+    },
+    {
+      "step": 12000,
+      "loss": 1.4702987670898438,
+      "aux_loss": NaN,
+      "sym_loss": NaN,
+      "aux_lambda": 0.0,
+      "sym_lambda": 0.0,
+      "cleanup_T": 1.0,
+      "rho": 1.0,
+      "used_real_this_batch": true,
+      "acc": {
+        "k1": 0.2578125,
+        "k2": 0.25,
+        "k3": 0.236328125,
+        "k4": 0.2421875
+      }
+    }
+  ]
+}

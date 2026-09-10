@@ -1,0 +1,47 @@
+{
+  "rig": "rig001_matprod",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "mp_cfg": {
+    "d_model": 128,
+    "d_key": 32,
+    "expand": 2,
+    "d_conv": 4,
+    "beta_bias_init": -1.5,
+    "n_layers": 2,
+    "additive_b": true
+  },
+  "run_cfg": {
+    "K1": 4,
+    "K2": 4,
+    "steps": 1500,
+    "batch": 64,
+    "lr": 0.0003,
+    "lr_floor": 3e-05,
+    "warmup": 200,
+    "weight_decay": 0.01,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "grad_clip": 1.0,
+    "mode": "mixed",
+    "eval_every": 100,
+    "eval_batches": 2,
+    "eval_batch_size": 256,
+    "device": "cuda"
+  },
+  "final_k4_per_seed": [
+    0.240234375,
+    0.234375,
+    0.251953125
+  ],
+  "wallclock_s_per_seed": [
+    191.674,
+    175.727,
+    190.427
+  ]
+}

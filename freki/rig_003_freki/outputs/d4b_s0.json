@@ -1,0 +1,55 @@
+{
+  "seed": 0,
+  "train_steps": 12000,
+  "freki2_final_k4": 0.994140625,
+  "actual_atok_acc": 0.99609375,
+  "mixer_lens": {
+    "layer0_y1": {
+      "acc_tgt": 0.02734375,
+      "acc_bridge": 0.0,
+      "acc_q": 0.00390625
+    },
+    "layer0_y2": {
+      "acc_tgt": 0.9921875,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer1_y1": {
+      "acc_tgt": 0.0,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer1_y2": {
+      "acc_tgt": 0.1015625,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer2_y1": {
+      "acc_tgt": 0.0703125,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer2_y2": {
+      "acc_tgt": 0.15625,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    }
+  },
+  "block_lens": {
+    "layer0_block_out": {
+      "acc_tgt": 0.765625,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer1_block_out": {
+      "acc_tgt": 0.99609375,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer2_block_out": {
+      "acc_tgt": 0.99609375,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    }
+  }
+}

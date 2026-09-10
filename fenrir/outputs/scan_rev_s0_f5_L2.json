@@ -1,0 +1,23 @@
+{
+  "ckpt": "table1__rev_K1max4_K2_4_s0.ckpt",
+  "variant": "rev",
+  "K1": 4,
+  "K2": 4,
+  "probed_layer": 2,
+  "n_batches": 4,
+  "batch": 128,
+  "alignments": {
+    "a_qatok_vs_ktarget": {
+      "same": 0.6227585077285767,
+      "ctrl": 0.6159499883651733
+    },
+    "b_bridge_vs_k2match": {
+      "same": 0.4742613136768341,
+      "ctrl": 0.4360238313674927
+    },
+    "c_bridgeval_vs_k1": {
+      "same": -0.22408458590507507,
+      "ctrl": -0.244007870554924
+    }
+  }
+}

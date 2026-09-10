@@ -1,0 +1,37 @@
+{
+  "seed": 0,
+  "train_steps": 12000,
+  "freki2_final_k4": 0.994140625,
+  "logit_lens": {
+    "layer0_y1": {
+      "acc_tgt": 0.00390625,
+      "acc_bridge": 0.01171875,
+      "acc_q": 0.0078125
+    },
+    "layer0_y2": {
+      "acc_tgt": 0.00390625,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer1_y1": {
+      "acc_tgt": 0.01171875,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer1_y2": {
+      "acc_tgt": 0.0,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer2_y1": {
+      "acc_tgt": 0.0,
+      "acc_bridge": 0.0,
+      "acc_q": 0.0
+    },
+    "layer2_y2": {
+      "acc_tgt": 0.0,
+      "acc_bridge": 0.0,
+      "acc_q": 0.00390625
+    }
+  }
+}

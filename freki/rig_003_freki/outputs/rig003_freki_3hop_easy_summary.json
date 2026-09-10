@@ -1,0 +1,81 @@
+{
+  "rig": "rig003_freki",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "freki_cfg": {
+    "d_model": 256,
+    "d_key": 32,
+    "expand": 2,
+    "d_conv": 4,
+    "beta_bias_init": -0.5,
+    "n_layers": 3,
+    "K_chain": 3,
+    "tie_kv_proj": false
+  },
+  "run_cfg": {
+    "K1": 2,
+    "K2": 2,
+    "steps": 12000,
+    "batch": 64,
+    "lr": 0.0003,
+    "lr_floor": 3e-05,
+    "warmup": 200,
+    "weight_decay": 0.01,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "grad_clip": 1.0,
+    "mode": "mixed",
+    "eval_every": 500,
+    "eval_batches": 2,
+    "eval_batch_size": 256,
+    "device": "cuda",
+    "autocast": true,
+    "pad_seq_to": 0,
+    "hops": 3,
+    "K3": 2,
+    "eval_K1_max": 0
+  },
+  "final_k4_per_seed": [
+    0.482421875,
+    0.50390625,
+    0.5078125,
+    0.501953125,
+    0.5
+  ],
+  "final_full_per_seed": [
+    {
+      "k1": 0.4765625,
+      "k2": 0.482421875
+    },
+    {
+      "k1": 0.51953125,
+      "k2": 0.50390625
+    },
+    {
+      "k1": 0.466796875,
+      "k2": 0.5078125
+    },
+    {
+      "k1": 0.501953125,
+      "k2": 0.501953125
+    },
+    {
+      "k1": 0.4765625,
+      "k2": 0.5
+    }
+  ],
+  "wallclock_s_per_seed": [
+    394.843,
+    410.166,
+    402.597,
+    401.131,
+    387.694
+  ]
+}

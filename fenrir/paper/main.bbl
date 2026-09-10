@@ -1,0 +1,140 @@
+\begin{thebibliography}{19}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Arora et~al.(2023)Arora, Eyuboglu, Timalsina, Johnson, Poli, Zou, and
+  R{\'e}]{arora2023zoology}
+Simran Arora, Sabri Eyuboglu, Aman Timalsina, Isys Johnson, Michael Poli, James
+  Zou, and Christopher R{\'e}.
+\newblock Zoology: Measuring and improving recall in efficient language models.
+\newblock \emph{arXiv preprint arXiv:2312.04927}, 2023.
+
+\bibitem[Arora et~al.(2024)Arora, Eyuboglu, Zhang, Timalsina, Alberti, Zinsley,
+  Zou, Rudra, and R{\'e}]{arora2024based}
+Simran Arora, Sabri Eyuboglu, Michael Zhang, Aman Timalsina, Silas Alberti,
+  Dylan Zinsley, James Zou, Atri Rudra, and Christopher R{\'e}.
+\newblock Simple linear attention language models balance the recall-throughput
+  tradeoff.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, 2024.
+
+\bibitem[Ba et~al.(2016)Ba, Hinton, Mnih, Leibo, and
+  Ionescu]{ba2016fastweights}
+Jimmy Ba, Geoffrey Hinton, Volodymyr Mnih, Joel~Z. Leibo, and Catalin Ionescu.
+\newblock Using fast weights to attend to the recent past.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2016.
+
+\bibitem[Dao and Gu(2024)]{dao2024mamba2}
+Tri Dao and Albert Gu.
+\newblock Transformers are {SSMs}: Generalized models and efficient algorithms
+  through structured state space duality.
+\newblock In \emph{Proceedings of the 41st International Conference on Machine
+  Learning (ICML)}, 2024.
+
+\bibitem[Gu and Dao(2023)]{gu2023mamba}
+Albert Gu and Tri Dao.
+\newblock Mamba: Linear-time sequence modeling with selective state spaces.
+\newblock \emph{arXiv preprint arXiv:2312.00752}, 2023.
+
+\bibitem[Irie et~al.(2021)Irie, Schlag, Csord{\'a}s, and
+  Schmidhuber]{irie2021rfwp}
+Kazuki Irie, Imanol Schlag, R{\'o}bert Csord{\'a}s, and J{\"u}rgen Schmidhuber.
+\newblock Going beyond linear transformers with recurrent fast weight
+  programmers.
+\newblock \emph{arXiv preprint arXiv:2106.06295}, 2021.
+
+\bibitem[Irie et~al.(2022{\natexlab{a}})Irie, Schlag, Csord{\'a}s, and
+  Schmidhuber]{irie2022srwm}
+Kazuki Irie, Imanol Schlag, R{\'o}bert Csord{\'a}s, and J{\"u}rgen Schmidhuber.
+\newblock A modern self-referential weight matrix that learns to modify itself.
+\newblock \emph{arXiv preprint arXiv:2202.05780}, 2022{\natexlab{a}}.
+
+\bibitem[Irie et~al.(2022{\natexlab{b}})Irie, Schlag, Csord{\'a}s, and
+  Schmidhuber]{schlag2021deltanet}
+Kazuki Irie, Imanol Schlag, R{\'o}bert Csord{\'a}s, and J{\"u}rgen Schmidhuber.
+\newblock A modern self-referential weight matrix that learns to modify itself.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2022{\natexlab{b}}.
+\newblock Contains the delta-rule fast-weight variant referred to as DeltaNet
+  in later work.
+
+\bibitem[Le et~al.(2026)Le, Nguyen, Nguyen, and Luu]{ccq2026}
+Dong Le, Thong Nguyen, Cong-Duy Nguyen, and Anh~Tuan Luu.
+\newblock Don't read everything: A curvature-conditioned query for linear
+  attention.
+\newblock \emph{arXiv preprint arXiv:2606.01294}, 2026.
+
+\bibitem[{nostalgebraist}(2020)]{nostalgebraist2020logitlens}
+{nostalgebraist}.
+\newblock interpreting {GPT}: the logit lens.
+\newblock
+  \url{https://www.lesswrong.com/posts/AcKRB8wDpdaN6v6ru/interpreting-gpt-the-logit-lens},
+  2020.
+\newblock LessWrong post.
+
+\bibitem[Olsson et~al.(2022)Olsson, Elhage, Nanda, Joseph, DasSarma,
+  et~al.]{olsson2022incontext}
+Catherine Olsson, Nelson Elhage, Neel Nanda, Nicholas Joseph, Nova DasSarma,
+  et~al.
+\newblock In-context learning and induction heads.
+\newblock \emph{Transformer Circuits Thread}, 2022.
+\newblock URL
+  \url{https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/}.
+
+\bibitem[Park et~al.(2026)Park, Kim, and Park]{qdelta2026}
+Sumin Park, Seojin Kim, and Noseong Park.
+\newblock Q-{D}elta: Beyond key-value associative state evolution.
+\newblock \emph{arXiv preprint arXiv:2606.08804}, 2026.
+
+\bibitem[Schlag et~al.(2021)Schlag, Irie, and Schmidhuber]{schlag2021linear}
+Imanol Schlag, Kazuki Irie, and J{\"u}rgen Schmidhuber.
+\newblock Linear transformers are secretly fast weight programmers.
+\newblock In \emph{Proceedings of the 38th International Conference on Machine
+  Learning (ICML)}, 2021.
+
+\bibitem[Schmidhuber(1992)]{schmidhuber1992fastweights}
+J{\"u}rgen Schmidhuber.
+\newblock Learning to control fast-weight memories: An alternative to dynamic
+  recurrent networks.
+\newblock \emph{Neural Computation}, 4\penalty0 (1):\penalty0 131--139, 1992.
+
+\bibitem[Siems et~al.(2025)Siems, Carstensen, Zela, Hutter, Pontil, and
+  Grazzi]{deltaproduct2025}
+Julien Siems, Timur Carstensen, Arber Zela, Frank Hutter, Massimiliano Pontil,
+  and Riccardo Grazzi.
+\newblock {D}elta{P}roduct: Improving state-tracking in linear {RNN}s via
+  householder products.
+\newblock \emph{arXiv preprint arXiv:2502.10297}, 2025.
+
+\bibitem[Sun et~al.(2024)Sun, Li, Dalal, Xu, Vikram, Zhang, Dubois, Chen, Wang,
+  Koyejo, Hashimoto, and Guestrin]{sun2024ttt}
+Yu~Sun, Xinhao Li, Karan Dalal, Jiarui Xu, Arjun Vikram, Genghan Zhang, Yann
+  Dubois, Xinlei Chen, Xiaolong Wang, Sanmi Koyejo, Tatsunori Hashimoto, and
+  Carlos Guestrin.
+\newblock Learning to (learn at test time): {RNN}s with expressive hidden
+  states.
+\newblock \emph{arXiv preprint arXiv:2407.04620}, 2024.
+
+\bibitem[Wang et~al.(2024)Wang, Yue, Su, and Sun]{wang2024grokked}
+Boshi Wang, Xiang Yue, Yu~Su, and Huan Sun.
+\newblock Grokked transformers are implicit reasoners: A mechanistic journey to
+  the edge of generalization.
+\newblock \emph{arXiv preprint arXiv:2405.15071}, 2024.
+
+\bibitem[Yang et~al.(2024{\natexlab{a}})Yang, Kautz, and
+  Hatamizadeh]{yang2024gated}
+Songlin Yang, Jan Kautz, and Ali Hatamizadeh.
+\newblock Gated delta networks: Improving mamba2 with delta rule.
+\newblock \emph{arXiv preprint arXiv:2412.06464}, 2024{\natexlab{a}}.
+
+\bibitem[Yang et~al.(2024{\natexlab{b}})Yang, Wang, Zhang, Shen, and
+  Kim]{yang2024parallelizing}
+Songlin Yang, Bailin Wang, Yikang Zhang, Yikang Shen, and Yoon Kim.
+\newblock Parallelizing linear transformers with the delta rule over sequence
+  length.
+\newblock \emph{arXiv preprint arXiv:2406.06484}, 2024{\natexlab{b}}.
+
+\end{thebibliography}

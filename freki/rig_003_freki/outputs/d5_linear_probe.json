@@ -1,0 +1,31 @@
+{
+  "n_examples": 8192,
+  "n_unique_bridges": 128,
+  "n_unique_tgts": 128,
+  "results": {
+    "y1_layer0_target_bridge": {
+      "train_acc": 1.0,
+      "val_acc": 0.9993898272514343
+    },
+    "y1_layer1_target_bridge": {
+      "train_acc": 0.11307797580957413,
+      "val_acc": 0.05308114364743233
+    },
+    "y1_layer2_target_bridge": {
+      "train_acc": 0.1854112595319748,
+      "val_acc": 0.1183648556470871
+    },
+    "y1_layer0_target_tgt": {
+      "train_acc": 0.05203723534941673,
+      "val_acc": 0.01220256183296442
+    },
+    "y1_layer1_target_tgt": {
+      "train_acc": 0.3757057785987854,
+      "val_acc": 0.24893227219581604
+    },
+    "y1_layer2_target_tgt": {
+      "train_acc": 0.17625515162944794,
+      "val_acc": 0.1031116470694542
+    }
+  }
+}

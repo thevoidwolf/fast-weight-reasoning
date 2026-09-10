@@ -1,0 +1,102 @@
+{
+  "K_bank": 4,
+  "n_trials": 2000,
+  "scenarios": [
+    {
+      "K_hops": 2,
+      "K_chain": 2,
+      "d_key": 32,
+      "noise": false,
+      "accuracy": 0.999,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 2,
+      "K_chain": 2,
+      "d_key": 32,
+      "noise": true,
+      "accuracy": 0.9935,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 2,
+      "K_chain": 2,
+      "d_key": 64,
+      "noise": false,
+      "accuracy": 1.0,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 2,
+      "K_chain": 2,
+      "d_key": 64,
+      "noise": true,
+      "accuracy": 1.0,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 2,
+      "K_chain": 2,
+      "d_key": 128,
+      "noise": false,
+      "accuracy": 1.0,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 2,
+      "K_chain": 2,
+      "d_key": 128,
+      "noise": true,
+      "accuracy": 1.0,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 3,
+      "K_chain": 3,
+      "d_key": 32,
+      "noise": false,
+      "accuracy": 0.98,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 3,
+      "K_chain": 3,
+      "d_key": 32,
+      "noise": true,
+      "accuracy": 0.9335,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 3,
+      "K_chain": 3,
+      "d_key": 64,
+      "noise": false,
+      "accuracy": 1.0,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 3,
+      "K_chain": 3,
+      "d_key": 64,
+      "noise": true,
+      "accuracy": 0.999,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 3,
+      "K_chain": 3,
+      "d_key": 128,
+      "noise": false,
+      "accuracy": 1.0,
+      "n_trials": 2000
+    },
+    {
+      "K_hops": 3,
+      "K_chain": 3,
+      "d_key": 128,
+      "noise": true,
+      "accuracy": 1.0,
+      "n_trials": 2000
+    }
+  ]
+}

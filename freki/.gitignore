@@ -1,0 +1,7 @@
+# Regenerable model checkpoints (~6MB each, cached by diagnostic scripts)
+*.pt
+*.ckpt
+
+# Python
+__pycache__/
+*.pyc

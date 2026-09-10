@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+.pytest_cache/
+.DS_Store
+
+# Regenerable training artifacts (the small result JSONs in each rig's
+# outputs/ folder ARE committed on purpose; the heavy checkpoints are not)
+*.ckpt
+*.pt
+*.log
+
+# LaTeX build artifacts (the compiled paper/main.pdf IS committed)
+paper/main.log
+paper/main.aux
+paper/main.blg
+paper/main.out
+paper/main.toc
+paper/main.fls
+paper/main.fdb_latexmk
+paper/*.synctex.gz

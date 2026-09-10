@@ -1,0 +1,10 @@
+# Enough to run both chapters. Everything is plain PyTorch.
+#
+# A CPU is enough for the plumbing and the FENRIR audit tests (pytest tests/).
+# A CUDA GPU (reference: NVIDIA RTX 5090) is what reproduces the headline
+# training numbers; the reference runs use bf16 autocast on CUDA.
+torch>=2.1
+numpy>=1.24
+scikit-learn>=1.3   # used by the FENRIR mechanism probes (linear read-out)
+einops>=0.7
+pytest>=7.4         # the FENRIR audit-as-code test suite

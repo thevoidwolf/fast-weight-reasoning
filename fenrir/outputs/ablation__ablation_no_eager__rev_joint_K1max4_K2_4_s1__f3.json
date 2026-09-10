@@ -1,0 +1,15 @@
+{
+  "ckpt": "ablation_no_eager__rev_joint_K1max4_K2_4_s1.ckpt",
+  "variant": "rev",
+  "K1": 4,
+  "K2": 4,
+  "chance": 0.25,
+  "n_batches": 8,
+  "batch": 256,
+  "acc_by_layer": {
+    "0": 0.2685546875,
+    "1": 0.26123046875,
+    "2": 0.24609375,
+    "3": 0.24267578125
+  }
+}

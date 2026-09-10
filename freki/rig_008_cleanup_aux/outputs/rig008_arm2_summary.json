@@ -1,0 +1,98 @@
+{
+  "rig": "rig008_cleanup_aux",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "hs_cfg": {
+    "d_model": 256,
+    "d_key": 32,
+    "expand": 2,
+    "d_conv": 4,
+    "beta_bias_init": -0.5,
+    "n_layers": 3,
+    "K_chain": 3
+  },
+  "run_cfg": {
+    "K1": 4,
+    "K2": 4,
+    "steps": 12000,
+    "batch": 64,
+    "lr": 0.0003,
+    "lr_floor": 3e-05,
+    "warmup": 200,
+    "weight_decay": 0.01,
+    "betas": [
+      0.9,
+      0.95
+    ],
+    "grad_clip": 1.0,
+    "mode": "mixed",
+    "eval_every": 500,
+    "eval_batches": 2,
+    "eval_batch_size": 256,
+    "device": "cuda",
+    "autocast": true,
+    "pad_seq_to": 0,
+    "hops": 3,
+    "K3": 4,
+    "eval_K1_max": 0
+  },
+  "aux": {
+    "style": "cleanup_plus_in_path_aux",
+    "layer": 0,
+    "lambda_init": 0.3,
+    "decay_tau": 4000.0,
+    "T_init": 5.0,
+    "T_final": 1.0
+  },
+  "final_k4_per_seed": [
+    0.994140625,
+    0.998046875,
+    0.25,
+    0.265625,
+    1.0
+  ],
+  "final_full_per_seed": [
+    {
+      "k1": 1.0,
+      "k2": 0.998046875,
+      "k3": 0.998046875,
+      "k4": 0.994140625
+    },
+    {
+      "k1": 1.0,
+      "k2": 1.0,
+      "k3": 1.0,
+      "k4": 0.998046875
+    },
+    {
+      "k1": 0.263671875,
+      "k2": 0.2265625,
+      "k3": 0.2578125,
+      "k4": 0.25
+    },
+    {
+      "k1": 0.310546875,
+      "k2": 0.26953125,
+      "k3": 0.25,
+      "k4": 0.265625
+    },
+    {
+      "k1": 0.998046875,
+      "k2": 1.0,
+      "k3": 0.998046875,
+      "k4": 1.0
+    }
+  ],
+  "wallclock_s_per_seed": [
+    458.232,
+    442.497,
+    459.642,
+    446.705,
+    453.759
+  ]
+}
