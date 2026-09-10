@@ -225,4 +225,4 @@ fast-weight-reasoning/
 - **Soft Thinking**: arXiv:2505.15778. A modern cousin of the cleanup idea.
 
 MIT licensed. Built by one person on one GPU, and written to be readable by
-someone who is not.
+non-specialists.
