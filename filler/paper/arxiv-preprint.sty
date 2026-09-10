@@ -1,0 +1,123 @@
+%%
+%% arxiv-preprint.sty — self-contained arXiv-style preprint format.
+%%
+%% Approximates the look of Kourbatov's popular arxiv-style template
+%% (github.com/kourgeorge/arxiv-style) without depending on it:
+%% Times body via newtx, sans-serif section headings, rule under the
+%% title, numeric-natbib author-year citations, colored hyperlinks.
+%%
+%% Requires a full TeXLive (or MikTeX) installation; all packages
+%% pulled in below are in the standard distribution.
+%%
+%% Usage:
+%%   \documentclass[11pt]{article}
+%%   \usepackage{arxiv-preprint}
+%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{arxiv-preprint}[2026/08/11 arXiv-style preprint format]
+
+% ---- Geometry, spacing, encoding -------------------------------------
+\RequirePackage[margin=1in,headheight=14pt]{geometry}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{microtype}
+\RequirePackage{parskip}
+
+% ---- Math (loaded before newtxmath, which builds on amsmath) ---------
+\RequirePackage{amsmath,amsthm}
+\RequirePackage{mathtools}
+
+% ---- Fonts: Times body + math (matches NeurIPS since 2019) -----------
+% newtxmath provides the AMSb symbols that amssymb would; loading
+% both collides on \Bbbk. Load newtxmath first, then relax the
+% shared macros, then amssymb for any symbols newtxmath omits.
+\RequirePackage{newtxtext,newtxmath}
+\let\Bbbk\relax
+\RequirePackage{amssymb}
+
+% ---- Tables and figures ---------------------------------------------
+\RequirePackage{booktabs}
+\RequirePackage{graphicx}
+\RequirePackage{caption}
+\RequirePackage{subcaption}
+\captionsetup{font=small,labelfont=bf,labelsep=period}
+
+% ---- Bibliography: natbib author-year --------------------------------
+\RequirePackage[round,authoryear]{natbib}
+
+% ---- Sectioning ------------------------------------------------------
+\RequirePackage{titlesec}
+\titleformat{\section}
+  {\normalsize\bfseries\sffamily}{\thesection}{0.7em}{}
+\titleformat{\subsection}
+  {\normalsize\bfseries\sffamily}{\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}
+  {\normalsize\itshape\sffamily}{\thesubsubsection}{0.7em}{}
+\titlespacing*{\section}     {0pt}{1.4\baselineskip}{0.4\baselineskip}
+\titlespacing*{\subsection}  {0pt}{1.0\baselineskip}{0.3\baselineskip}
+\titlespacing*{\subsubsection}{0pt}{0.8\baselineskip}{0.2\baselineskip}
+
+% ---- Hyperlinks (loaded late for cleveref/natbib compatibility) ------
+\RequirePackage[colorlinks=true,
+                linkcolor=blue!45!black,
+                citecolor=blue!45!black,
+                urlcolor=blue!55!black,
+                pdfusetitle]{hyperref}
+\RequirePackage[capitalise,noabbrev]{cleveref}
+
+% ---- Author block ----------------------------------------------------
+\RequirePackage{authblk}
+\renewcommand\Authfont{\normalsize}
+\renewcommand\Affilfont{\small\itshape}
+\setlength{\affilsep}{0.3em}
+
+% ---- Title / abstract format -----------------------------------------
+\makeatletter
+\def\@maketitle{%
+  \newpage\null
+  \begin{center}%
+    {\LARGE\bfseries\sffamily \@title \par}%
+    \vskip 1.2em
+    {\normalsize \@author \par}%
+  \end{center}%
+  \par
+  \vskip 0.4em
+  \hrule height 0.4pt
+  \vskip 1em
+}
+\makeatother
+
+\renewenvironment{abstract}{%
+  \small
+  \begin{center}{\bfseries\sffamily Abstract}\end{center}%
+  \vspace{-0.4em}%
+  \begin{quote}
+}{%
+  \end{quote}%
+  \vskip 0.6em
+  \hrule height 0.4pt
+  \vskip 1em
+}
+
+% ---- Theorem-like environments (opt-in) ------------------------------
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% ---- Small utilities -------------------------------------------------
+\RequirePackage{xcolor}
+\RequirePackage{enumitem}
+\setlist{itemsep=0.15em,topsep=0.3em,parsep=0em}
+
+% ---- End of style file -----------------------------------------------
+\endinput

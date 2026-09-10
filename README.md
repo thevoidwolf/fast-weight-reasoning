@@ -4,10 +4,11 @@ Can a small, cheap, memory-based model learn to *chain facts together* inside a
 single pass, the way a transformer does, without paying for attention?
 
 That is the whole question behind this repo. I spent a good while chasing it on
-one GPU, and this is the honest write-up of two attempts. Both are named after
-wolves, because I was in that kind of mood. Neither one unseated attention. But
-both produced a clean, reproducible result, and together they map out exactly
-where the wall is.
+one GPU, and this is the honest write-up of three chapters. The first two are
+named after wolves, because I was in that kind of mood; the third is named after
+what it does. None of them unseated attention. But each produced a clean,
+reproducible result, and together they map out where the wall is and one training
+trick that gets through part of it.
 
 This is the plain-language walkthrough. The code is the technical version.
 
@@ -39,7 +40,7 @@ This repo is my attempt at that prize, and an honest account of how far it got.
 
 ## The tool: fast weights
 
-Both attempts use an old idea called **fast weights** (Schmidhuber, 1992). The
+All three chapters lean on an old idea called **fast weights** (Schmidhuber, 1992). The
 short version: instead of only storing memories in a fixed vector, the layer
 keeps a small **matrix** `M` that it writes to as it reads. Each new key/value
 pair gets written into `M` as an outer product (a little grid of key-times-value
@@ -150,6 +151,36 @@ It shows the chained-read-plus-cleanup stack is not window dressing; it is
 carrying the whole result. Plain stacked memory layers simply cannot compose
 three hops at this vocabulary size.
 
+## Chapter 3: filler-augmented training, get through the depth wall
+
+Chapters 1 and 2 were about getting the chain to form at all. Chapter 3 is about
+what happens when you push the *same* fast-weight mixer deeper, to five and six
+hops, where it starts falling apart in three tangled ways at once: it leans on the
+tokens next to the question instead of its memory, its internal state blows up on
+long inputs, and past a certain depth no healthy run forms at all.
+
+**The idea.** Change nothing about the model. Just change training: sprinkle a
+random number of "filler" tokens between the last fact and the question, ramped in
+after a warm-up. If the gap between the facts and the question keeps changing, the
+model cannot lean on whatever sits next to the question, so it has to use its
+memory instead, and that turns out to fix all three failures together.
+
+```mermaid
+flowchart LR
+    F["... the facts ..."] --> X["random filler<br/>(0 to 200 tokens)"] --> Q["the question"] --> A["answer"]
+```
+
+*Varying the gap between facts and question during training forces the model onto
+its memory rather than onto nearby tokens.*
+
+**What actually happened.** At six hops the plain recipe produces no healthy runs;
+the filler recipe restores a 4-of-5 pass rate, and it holds from three hops up to
+six. This is the most "it worked" of the three chapters, with one honest catch: at
+depth the trick biases the model toward expecting filler, so the passing runs
+increasingly need some filler present at test time to hit their best accuracy. It
+buys robustness to separation, not a free lunch. Full numbers are in
+`filler/README.md`, and this chapter has its own short paper in `filler/paper/`.
+
 ## Where the wall actually is (the honest part)
 
 I did not get a cheap recurrent layer that reasons like a transformer. Here is
@@ -166,23 +197,25 @@ numbers:
   above the guessing floor). The diagnosis: the memory needs to *choose* what is
   worth writing down, and a plain delta-rule write does not have that
   content-based selectivity. That is a real limitation, not a tuning miss.
-- **Both chapters are honest about novelty.** FENRIR's paper explicitly makes no
-  claim of a new primitive; its contribution is the mechanistic characterization
+- **All three chapters are honest about novelty.** FENRIR's paper explicitly makes
+  no claim of a new primitive; its contribution is the mechanistic characterization
   and a reproduction workflow you can audit. FREKI builds directly on Fast Weight
-  Memory and Resonator Networks, as above. I chased "be the first" for a while on
-  this line of work, and the more useful thing turned out to be building
-  carefully on what already exists and reporting exactly what happened.
+  Memory and Resonator Networks, as above. Chapter 3 is a training recipe, not a
+  new mechanism. I chased "be the first" for a while on this line of work, and the
+  more useful thing turned out to be building carefully on what already exists and
+  reporting exactly what happened.
 
 If you want the one-line takeaway: **plain recurrent memory cannot chain lookups
 at any real scale, an in-layer chained read with cleanup can, and getting it to
 train reliably is a recipe problem with a clear negative control.**
 
-## The two chapters are wired together
+## The chapters are wired together
 
-FREKI's `rig_000` is a sanity check that imports the actual FENRIR mixer from
-chapter 1 and runs it through chapter 2's training harness, to confirm the two
-codebases agree on the baseline before anything is compared. So the repo is not
-two loose folders; chapter 2 literally runs chapter 1's code as its floor.
+They are not three loose folders. FREKI's `rig_000` imports the actual FENRIR
+mixer from chapter 1 and runs it through chapter 2's training harness, to confirm
+the two codebases agree on the baseline before anything is compared. And chapter 3
+trains chapter 1's own eager-closure mixer, so the filler result is about the very
+same primitive, just pushed deeper. Chapter 1's mechanism runs through all three.
 
 ## How to run it
 
@@ -206,6 +239,10 @@ python rig_003_freki/run.py --seeds 0 1 2 3 4 --steps 12000   # two-hop, 10/10
 python rig_010_arm2_plus_arm3/run.py                          # three-hop recipe, 5/5
 python rig_013_delta_write/run.py \
   --K-chain 1 --aux-lambda-init 0 --sym-lambda-init 0         # the plain baseline that fails at chance
+
+# Chapter 3: the six-hop depth wall, baseline vs the filler recipe.
+cd ../filler
+python experiments/01_depth_wall_hops6.py --full             # baseline n=3 + filler n=5
 ```
 
 Each chapter has its own README with the full reproduction details and the
@@ -231,6 +268,12 @@ fast-weight-reasoning/
     rig_010_arm2_plus_arm3/  the three-hop recipe (all ingredients stacked)
     rig_013_delta_write/ the delta-rule write and the negative control
     rig_000_..rig_018_/  the full ladder of attempts, including the dead ends
+  filler/                Chapter 3: a training trick that extends depth
+    README.md            chapter write-up + reproduction + result table
+    model.py             chapter 1's eager-closure mixer + chunk-parallel kernel
+    nhop_task.py         the N-hop chain task and the filler insertion
+    probe.py             div_norm + the query-conditioning probe
+    experiments/         01 the six-hop depth wall, 02 the depth sweep
 ```
 
 ## Credit where it is due

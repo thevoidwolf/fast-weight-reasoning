@@ -1,0 +1,138 @@
+\begin{thebibliography}{21}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Arora et~al.(2023)Arora, Eyuboglu, Timalsina, Johnson, Poli, Zou,
+  Rudra, and R{\'e}]{arora2023zoology}
+Simran Arora, Sabri Eyuboglu, Aman Timalsina, Isys Johnson, Michael Poli, James
+  Zou, Atri Rudra, and Christopher R{\'e}.
+\newblock Zoology: Measuring and improving recall in efficient language models,
+  2023.
+
+\bibitem[Arora et~al.(2024)Arora, Eyuboglu, Zhang, Timalsina, Alberti, Zinsley,
+  Zou, Rudra, and R{\'e}]{arora2024based}
+Simran Arora, Sabri Eyuboglu, Michael Zhang, Aman Timalsina, Silas Alberti,
+  Dylan Zinsley, James Zou, Atri Rudra, and Christopher R{\'e}.
+\newblock Simple linear attention language models balance the recall-throughput
+  tradeoff, 2024.
+
+\bibitem[Behrouz et~al.(2025)Behrouz, Zhong, and Mirrokni]{behrouz2025titans}
+Ali Behrouz, Peilin Zhong, and Vahab Mirrokni.
+\newblock Titans: Learning to memorize at test time, 2025.
+
+\bibitem[Dao and Gu(2024)]{dao2024mamba2}
+Tri Dao and Albert Gu.
+\newblock Transformers are {SSM}s: Generalized models and efficient algorithms
+  through structured state space duality, 2024.
+
+\bibitem[Goyal et~al.(2023)Goyal, Ji, Rawat, Menon, Kumar, and
+  Nagarajan]{goyal2023think}
+Sachin Goyal, Ziwei Ji, Ankit~Singh Rawat, Aditya~Krishna Menon, Sanjiv Kumar,
+  and Vaishnavh Nagarajan.
+\newblock Think before you speak: Training language models with pause tokens,
+  2023.
+
+\bibitem[Gu and Dao(2024)]{gu2024mamba}
+Albert Gu and Tri Dao.
+\newblock Mamba: Linear-time sequence modeling with selective state spaces,
+  2024.
+
+\bibitem[Hao et~al.(2024)Hao, Sukhbaatar, Su, Li, Hu, Weston, and
+  Tian]{hao2024coconut}
+Shibo Hao, Sainbayar Sukhbaatar, DiJia Su, Xian Li, Zhiting Hu, Jason Weston,
+  and Yuandong Tian.
+\newblock Training large language models to reason in a continuous latent
+  space, 2024.
+
+\bibitem[Irie et~al.(2021)Irie, Schlag, Cs{\'o}rd{\'a}s, and
+  Schmidhuber]{irie2021going}
+Kazuki Irie, Imanol Schlag, R{\'o}bert Cs{\'o}rd{\'a}s, and J{\"u}rgen
+  Schmidhuber.
+\newblock Going beyond linear transformers with recurrent fast weight
+  programmers, 2021.
+
+\bibitem[Irie et~al.(2022)Irie, Schlag, Cs{\'o}rd{\'a}s, and
+  Schmidhuber]{irie2022srwm}
+Kazuki Irie, Imanol Schlag, R{\'o}bert Cs{\'o}rd{\'a}s, and J{\"u}rgen
+  Schmidhuber.
+\newblock A modern self-referential weight matrix that learns to modify itself.
+\newblock In \emph{International Conference on Machine Learning}, 2022.
+\newblock arXiv:2202.05780.
+
+\bibitem[Liu et~al.(2023)Liu, Kitouni, Nolte, Michaud, Tegmark, and
+  Williams]{liu2023towards}
+Ziming Liu, Ouail Kitouni, Niklas Nolte, Eric Michaud, Max Tegmark, and Mike
+  Williams.
+\newblock Towards understanding grokking: An effective theory of representation
+  learning, 2023.
+
+\bibitem[Olsson et~al.(2022)Olsson, Elhage, Nanda, Joseph, DasSarma, Henighan,
+  Mann, Askell, Bai, Chen, and Others]{olsson2022inductionheads}
+Catherine Olsson, Nelson Elhage, Neel Nanda, Nicholas Joseph, Nova DasSarma,
+  Tom Henighan, Ben Mann, Amanda Askell, Yuntao Bai, Anna Chen, and Others.
+\newblock In-context learning and induction heads, 2022.
+
+\bibitem[Peng et~al.(2025)Peng, Zhang, Goldstein, Alcaide, Du, Ferdinan, Hou,
+  Kazienko, GV, Koc{\'o}n, and Others]{peng2024rwkv7}
+Bo~Peng, Ruichong Zhang, Daniel Goldstein, Eric Alcaide, Xingjian Du, Teddy
+  Ferdinan, Haowen Hou, Przemys{\l}aw Kazienko, Kranthi~Kiran GV, Jan
+  Koc{\'o}n, and Others.
+\newblock Rwkv-7 "goose" with expressive dynamic state evolution, 2025.
+
+\bibitem[Pfau et~al.(2024)Pfau, Merrill, and Bowman]{pfau2024let}
+Jacob Pfau, William Merrill, and Samuel~R. Bowman.
+\newblock Let's think dot by dot: Hidden computation in transformer language
+  models, 2024.
+
+\bibitem[Schlag et~al.(2021)Schlag, Irie, and Schmidhuber]{schlag2021linear}
+Imanol Schlag, Kazuki Irie, and J{\"u}rgen Schmidhuber.
+\newblock Linear transformers are secretly fast weight programmers.
+\newblock In \emph{International Conference on Machine Learning}, 2021.
+
+\bibitem[Schmidhuber(1992)]{schmidhuber1992learning}
+J{\"u}rgen Schmidhuber.
+\newblock Learning to control fast-weight memories: An alternative to dynamic
+  recurrent networks.
+\newblock \emph{Neural Computation}, 4\penalty0 (1):\penalty0 131--139, 1992.
+
+\bibitem[Schmidhuber(1993)]{schmidhuber1993reducing}
+J{\"u}rgen Schmidhuber.
+\newblock Reducing the ratio between learning complexity and number of time
+  varying variables in fully recurrent nets.
+\newblock \emph{International Conference on Artificial Neural Networks}, 1993.
+
+\bibitem[Sun et~al.(2024)Sun, Li, Dalal, Xu, Vikram, Zhang, Dubois, Chen, Wang,
+  Koyejo, Hashimoto, and Guestrin]{sun2024ttt}
+Yu~Sun, Xinhao Li, Karan Dalal, Jiarui Xu, Arjun Vikram, Genghan Zhang, Yann
+  Dubois, Xinlei Chen, Xiaolong Wang, Sanmi Koyejo, Tatsunori Hashimoto, and
+  Carlos Guestrin.
+\newblock Learning to (learn at test time): {RNN}s with expressive hidden
+  states, 2024.
+
+\bibitem[Voidwolf(2026)]{fenrir2026}
+Voidwolf.
+\newblock {FENRIR}: chunk-parallel address-perturbation fast weights for
+  multi-hop associative composition, 2026.
+\newblock Companion paper (in preparation).
+
+\bibitem[Wang et~al.(2024)Wang, Yue, Su, and Sun]{wang2024grokked}
+Boshi Wang, Xiang Yue, Yu~Su, and Huan Sun.
+\newblock Grokked transformers are implicit reasoners: A mechanistic journey to
+  the edge of generalization, 2024.
+
+\bibitem[Yang et~al.(2024{\natexlab{a}})Yang, Kautz, and
+  Hatamizadeh]{yang2024gated}
+Songlin Yang, Jan Kautz, and Ali Hatamizadeh.
+\newblock Gated delta networks: Improving mamba2 with delta rule,
+  2024{\natexlab{a}}.
+
+\bibitem[Yang et~al.(2024{\natexlab{b}})Yang, Wang, Zhang, and
+  Kim]{yang2024deltanet}
+Songlin Yang, Bailin Wang, Yu~Zhang, and Yoon Kim.
+\newblock Parallelizing linear transformers with the delta rule over sequence
+  length, 2024{\natexlab{b}}.
+
+\end{thebibliography}

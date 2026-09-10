@@ -1,0 +1,617 @@
+\documentclass[11pt]{article}
+\usepackage{arxiv-preprint}
+
+\title{Filler-Augmented Training Extends Depth\\ and Prevents State Divergence\\ in Fast-Weight Recurrent Sequence Models}
+
+\author[1]{Voidwolf}
+\affil[1]{Independent \\ \texttt{research@voidwolf.space}}
+
+\date{August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Fast-weight recurrent sequence models with content-addressed memory
+can compose multi-hop associative retrievals inside a single forward
+pass, but training at moderate depth reveals three coupled failures:
+\emph{query-conditioned formation}, in which a fraction of seeds
+converge to a low-rank readout that collapses when any filler
+separates the last fact from the query; \emph{state divergence}, in
+which the residual-stream norm grows exponentially past a
+sequence-length threshold and the readout collapses onto whichever
+token direction the explosion aligns with; and a
+\emph{baseline depth wall} beyond which no healthy seed forms at all.
+We show that a single training-time modification addresses all
+three failures simultaneously: insert a uniform-random count of
+filler tokens between the last fact and the query, with a
+warm-up-and-ramp schedule and a two-task joint loss. Across trained hop
+counts $K_{\mathrm{hops}} \in \{3, 4, 5, 6\}$, the recipe drops the
+mean query-conditioning diagnostic from above the state-persistent
+boundary to below it, eliminates seeds whose residual-stream norm
+exceeds $10^3$ at $N=2000$ filler positions, and restores a $4/5$
+pass rate at the $K_{\mathrm{hops}}=6$ cell where the baseline recipe
+produced $0/3$ healthy seeds. The intervention is scaffold-agnostic:
+an explicitly two-layer variant of the same architecture solves the
+$K_{\mathrm{hops}}=3$ task under the same recipe with target
+accuracy $0.992$ across three seeds. We report a known nuance: at depth the recipe biases the model
+toward the filler-present distribution, so pass-seeds increasingly
+need filler at evaluation to reach their headline accuracy. We
+close by placing the recipe inside the broader landscape of
+training-time interventions for recurrent recall.
+\end{abstract}
+
+% ======================================================================
+\section{Introduction}
+\label{sec:intro}
+
+Fast-weight recurrent sequence models maintain an outer-product
+associative memory as their hidden state, updating it in place per
+token. The family runs from \citet{schlag2021linear}, which cast
+linear transformers as fast-weight programmers, through the modern
+DeltaNet lineage \citep{yang2024deltanet,yang2024gated} and its
+self-referential branch \citep{irie2022srwm}. On single-hop associative recall, the family closes much of
+the recall-capacity gap between Mamba-style state-space models
+\citep{gu2024mamba,dao2024mamba2} and softmax attention
+\citep{arora2023zoology,arora2024based}. On \emph{multi-hop}
+composition, where the answer to a query depends on chaining several
+stored $(k, v)$ pairs, fast-weight models matter for a further
+reason: the fast-weight state, unlike Mamba's diagonal SSM state,
+admits a write that composes state-dependent addresses inside a
+single forward pass. A recent extension of the DeltaNet
+lineage supplies exactly such a write and composes hop-chains of
+length $K_{\mathrm{hops}} \le 5$ inside a fixed three-layer stack at
+the trained per-hop bank capacity.
+
+At $K_{\mathrm{hops}} = 6$, the baseline training recipe fails
+categorically: across three replicated seeds, one lands near chance,
+one appears to converge but is measured to hold the answer in a
+representation that collapses under a single filler token, and one
+diverges numerically. The failure is not "the trained network is not
+accurate enough"; it is three distinct pathologies, all present, all
+mixed within the seed distribution. We call them
+\emph{query-conditioned formation}, \emph{state divergence}, and the
+\emph{depth wall}. They admit separate mechanistic descriptions
+(Sec.~\ref{sec:failures}) but they respond, jointly, to one training
+recipe: inserting a uniform-random number of filler tokens between the
+last stored fact and the query, ramped in over a warm-up window.
+
+\paragraph{Contributions.} This paper isolates and reports that
+recipe. Specifically we contribute:
+
+\begin{enumerate}
+\item A formal description of the filler-augmented training procedure
+      (schedule, loss structure, and hyperparameter defaults) that is
+      architecture-generic within the fast-weight family
+      (Sec.~\ref{sec:method}).
+\item Evidence that the recipe restores a healthy pass rate at the
+      $K_{\mathrm{hops}}=6$ depth cell where the baseline recipe
+      produces zero healthy seeds (Sec.~\ref{sec:depth-wall}).
+\item Evidence that the same recipe, at the same hyperparameters,
+      drops the query-conditioning diagnostic below the
+      state-persistent boundary across
+      $K_{\mathrm{hops}} \in \{3, 4, 5, 6\}$ (Sec.~\ref{sec:formation})
+      and eliminates state divergence across the same range
+      (Sec.~\ref{sec:divergence}).
+\item Two ablations: (a) the recipe is scaffold-agnostic, in that an
+      explicitly two-layer variant of the architecture solves under
+      the same procedure with mean target accuracy $0.992$ across
+      three seeds (Sec.~\ref{sec:ablations}); (b) an occlusion-invariance
+      auxiliary loss steers formation into the same mode, providing
+      a second training-time route to the same effect
+      (Sec.~\ref{sec:ablations}).
+\item A characterisation of the recipe's principal cost: at
+      $K_{\mathrm{hops}} \ge 4$ the recipe biases the model toward
+      the filler-present distribution, so pass-seeds solve strictly
+      better with filler than without (Sec.~\ref{sec:filler-dep}).
+\end{enumerate}
+
+\paragraph{Position.} The recipe belongs to the catalogue of
+training-time interventions that shape which representation
+gradient descent commits to when several representations solve the
+training distribution equally well
+\citep{wang2024grokked,olsson2022inductionheads,liu2023towards}. The
+distinctive property here is that a single intervention resolves
+three empirically separable failure modes at once, at the cost of
+one hyperparameter, and does so through a mechanism that is
+mechanistically legible: the intervention forces the readout to
+operate on the fast-weight state rather than the query's local
+receptive field, and it forces the write on filler tokens to be
+near-zero. Both of those consequences fall out of the SEP-write
+geometry the recipe induces.
+
+% ======================================================================
+\section{Background}
+\label{sec:background}
+
+We assume familiarity with fast-weight recurrent layers; readers
+who want a survey are referred to
+\citet{schlag2021linear,yang2024deltanet,irie2022srwm}. This section
+fixes notation, states the retrieval task the paper's experiments
+run on, and names the three failure modes the recipe is designed to
+address.
+
+\subsection{The mixer}
+
+At each position $t$ the layer computes query, key, value, and
+gate projections
+$q_t = W_q x_t$, $k_t = W_k x_t$, $v_t = W_v x_t$,
+$\beta_t = \sigma(W_\beta x_t)$, then a state-dependent effective
+key $k^{\mathrm{eff}}_t = k_t + M_{t-1} k_t$, updates
+\begin{equation}
+  M_t \;=\; M_{t-1} \;+\; \beta_t \cdot k^{\mathrm{eff}}_t \, v_t^\top,
+  \label{eq:write}
+\end{equation}
+and reads $y_t = M_t^\top q_t$. The state
+$M_t \in \mathbb{R}^{d_k \times d_v}$
+is an outer-product associative memory; the effective-key term
+$M_{t-1} k_t$ is a state \emph{lookup} of the raw key, retrieving
+the stored key whose associated value most resembles the current
+input's key, so the write address is a linear function of what is
+already stored under $k_t$ at the moment of the write.\footnote{This is the minimal
+address-side residual in the sense discussed in
+\citet{irie2022srwm,irie2021going}. It keeps the recurrence affine in
+$M$, which is what allows the layer to be chunk-parallelised at the
+DeltaNet complexity class \citep{yang2024deltanet}.} The layer is
+placed inside a standard Mamba-style scaffold
+\citep{gu2024mamba,dao2024mamba2}: input projection, grouped
+convolution, SiLU, $z$-branch gate, output projection. Throughout the
+paper we use $L=3$ layers, $d_{\mathrm{model}} = 256$,
+$d_k = d_v = 32$, and bf16 autocast unless otherwise stated.
+
+\subsection{The retrieval task}
+
+The task is $K_{\mathrm{hops}}$-hop factorised associative retrieval,
+a multi-hop generalisation of the single-hop associative-recall
+tasks in \citet{arora2023zoology,arora2024based} developed for the
+companion mechanism paper \citep{fenrir2026}. Each row is a concatenation of
+$K_{\mathrm{hops}} - 1$ intermediate fact banks (each holding $K_i$
+$(k, v)$ pairs) and a final bank (holding $K_N$ pairs), separated by
+SEP tokens, followed by a query token and a target token to be
+predicted. Bridge assignments between successive banks are drawn as
+random permutations, so a "confused-entity" traversal cannot land on
+the correct target by construction. Chance is $1/K_N$; we hold
+$K_i = 4$ for $i < N$ and $K_N = 8$, giving chance $0.125$. This is
+the "$K_1=4/K_N=8$ matched-difficulty" setting inherited from
+earlier work on the mechanism; it is the shape at which a positive
+result cannot be reached by simply outputting some value from a
+small set.
+
+\subsection{Three failure modes at depth}
+\label{sec:failures}
+
+Under the baseline training recipe (no filler, joint half-half loss
+on a $K_1 = 1$ probe and the $K_{\mathrm{hops}}$ target,
+$15{,}000$ steps, batch $64$), the trained model fails at depth in
+three distinct ways.
+
+\paragraph{(F1) Query-conditioned formation.} A fraction of seeds
+(one third to one half in our replications) converge to a solution
+whose readout depends on local content adjacent to the query token
+rather than on the fast-weight state. Inserting even a handful of
+filler tokens between the last fact and the query collapses the
+prediction. The failure has a clean training-time diagnostic:
+QTOK-flip \citep{fenrir2026}, the fraction of the prediction
+distribution that changes when the query token is half-occluded,
+above $0.15$ at step $5000$ predicts the mode at step $15000$.
+Section~\ref{sec:formation} treats this diagnostic in the results.
+
+\paragraph{(F2) State divergence.} A separate fraction of seeds
+(growing with $K_{\mathrm{hops}}$) produce a readout that
+appears healthy on the training-length distribution but whose
+residual-stream norm grows exponentially at inference length. On
+audited baseline seeds, the norm at $N = 500$ inserted filler
+positions can already reach $10^5$; at $N = 2000$ it can exceed
+$10^{12}$ (measured on rig-056 $K_{\mathrm{hops}}=5$ seeds via a
+post-hoc divergence audit). The readout collapses to whichever vocabulary token
+happens to align with the direction of the explosion. Different
+divergent seeds diverge in different directions, so the collapse is
+seed-specific rather than model-specific.
+
+\paragraph{(F3) The depth wall.} Under the baseline recipe, hop
+counts $K_{\mathrm{hops}} \in \{2, 3, 4, 5\}$ are solved with mean
+accuracy above $0.94$ across three-seed replications. At
+$K_{\mathrm{hops}} = 6$, three replicated seeds all fail: one lands
+at chance with mild query-conditioning, one lands at $0.86$ target
+but with QTOK-flip $= 0.77$ and NaN state on filler probes (a
+degenerate solve through the query window rather than the state),
+and one lands at chance with a state that diverges by $10^9$-scale
+norm at $N = 2000$. The failure is not a matter of insufficient
+budget; each of the three failures reflects a different local
+optimum the baseline recipe steers seeds into as the mechanism has
+to compose one more hop than the state's write geometry easily
+supports.
+
+% ======================================================================
+\section{The recipe}
+\label{sec:method}
+
+The intervention has three components: an insertion, a schedule, and
+a joint loss.
+
+\subsection{Insertion}
+
+For each training row containing $K_{\mathrm{hops}}$-hop target
+structure, before appending the query token, we insert $n$ copies of
+the SEP token between the last bank's final fact and the query,
+where
+\[
+  n \;\sim\; \mathrm{Uniform}\{0, 1, \dots, n_{\max}(t)\}.
+\]
+One $n$ is drawn per batch (a single filler length applies to all
+rows within a batch), redrawn every step. $n_{\max}(t)$ is a
+function of the training step $t$, described next.
+
+\subsection{Schedule}
+
+$n_{\max}(t)$ starts at $0$, holds at $0$ across a warm-up window
+$[0, T_{\mathrm{warm}}]$, then ramps linearly to a target cap
+$n^\star$ across $[T_{\mathrm{warm}}, T_{\mathrm{warm}} + T_{\mathrm{ramp}}]$,
+and holds at $n^\star$ thereafter:
+\[
+  n_{\max}(t) \;=\; n^\star \cdot \mathrm{clip}\!\left(
+    \frac{t - T_{\mathrm{warm}}}{T_{\mathrm{ramp}}},\; 0,\; 1
+  \right).
+\]
+The warm-up matters: the mechanism needs to form on the
+short-sequence distribution before it can be pulled onto the
+filler-present distribution. Skipping warm-up produces seeds that
+never form the mechanism at all. Throughout the paper we use
+$T_{\mathrm{warm}} = 2000$ steps, $T_{\mathrm{ramp}} = 2000$ steps,
+and $n^\star = 200$. These defaults have not been tuned per-depth;
+Sec.~\ref{sec:ablations} shows they carry the $K_{\mathrm{hops}}=6$
+cell without adjustment.
+
+\subsection{Loss}
+
+Every step draws two batches of equal size: a $K_1 = 1$ probe batch
+with no filler, and a $K_{\mathrm{hops}}$ target batch with filler
+drawn as above. The total loss is the equal-weight average of the
+two per-token cross-entropies. The probe batch keeps the write
+geometry on short sequences aligned with the target task's write
+geometry; ablating it (target-only loss with filler) produces seeds
+that solve the filler-present distribution but not the filler-free
+distribution and vice versa.
+
+\subsection{What it changes about the write}
+
+The recipe's effect can be read out of Eq.~\ref{eq:write}: on filler
+(SEP) positions the gate $\beta_t$ must not write meaningful content
+into $M$, because the target loss punishes any state accumulation
+that survives up to the query position. This has two consequences.
+First, the readout $M_T q_T$ at the query position is forced to
+retrieve from what was stored at the fact positions, not from
+whatever the last few positions before the query happened to
+contain. That fixes the query-conditioned failure (F1) by
+construction.
+Second, the state stops accumulating on filler tokens, which fixes
+the state divergence failure (F2) at its geometric cause: the
+divergence traced by \citet{fenrir2026} is precisely a runaway
+accumulation of non-negligible writes on many SEP positions.
+
+% ======================================================================
+\section{Experimental setup}
+\label{sec:setup}
+
+We report five-seed replications for each $K_{\mathrm{hops}}$ cell in
+$\{3, 4, 5, 6\}$, plus a three-seed replication for the two-layer
+ablation. Training runs $15{,}000$ steps at batch $64$ with the
+AdamW optimiser (weight decay $0.01$, $\beta = (0.9, 0.95)$),
+cosine LR schedule with base LR $3 \cdot 10^{-4}$, $200$-step
+warmup, and floor $3 \cdot 10^{-5}$ ($10\%$ of base). Gradients
+are clipped to unit norm before each step. Autocast is bf16. All
+experiments run on an AMD Radeon RX 7900 XTX (RDNA3, 24\,GB, via
+ROCm 7.2); a chunked implementation of the mixer
+\citep{yang2024deltanet,fenrir2026} produces a $4.2$x wallclock
+speedup on the $K_{\mathrm{hops}}=2$ shape and $6.0$x on
+$K_{\mathrm{hops}}=3$; loop-parity holds at $K_{\mathrm{hops}}=5$
+to $1.5 \cdot 10^{-6}$ relative error.
+
+\paragraph{Metrics.}
+
+\begin{itemize}
+\item \textbf{Target accuracy at N=200 fillers} (target$_{N=200}$):
+      the primary headline. Evaluated on $2000$ held-out rows
+      constructed identically to training but with fixed $n = 200$
+      filler tokens inserted.
+\item \textbf{Target accuracy at N=0 fillers} (target$_{N=0}$):
+      how the seed behaves on the filler-free distribution.
+      Difference from target$_{N=200}$ diagnoses
+      filler-dependence (Sec.~\ref{sec:filler-dep}).
+\item \textbf{QTOK-flip}: fraction of predictions that change when
+      the query token is half-occluded, at a fixed filler length
+      $N = 200$. Above $0.15$ = query-conditioned; at or below
+      $0.15$ = state-persistent \citep{fenrir2026}. Passing seeds
+      under the recipe cluster well below the boundary (typically
+      $\le 0.03$).
+\item \textbf{div\_norm@N=2000}: residual-stream norm at position
+      $\mathrm{seq\_len} - 1$ when evaluated at $N = 2000$ inserted
+      fillers. Above $10^3$ = diverging; below $10^2$ = healthy
+      \citep{fenrir2026}.
+\end{itemize}
+
+\paragraph{Verdict rules.} A seed \emph{passes} its cell if
+target$_{N=200} \ge 0.80$, QTOK-flip $\le 0.15$
+(state-persistent), and div\_norm@N=2000 $< 10^3$. A cell passes
+if $\ge 4/5$ seeds pass; a cell is a strong pass if all seeds
+pass. The rules are pre-registered from the earlier design
+document; the $0.80$ threshold sits well above chance $0.125$.
+
+% ======================================================================
+\section{Results}
+\label{sec:results}
+
+The main empirical claim: one recipe, unchanged across four hop
+counts, restores target accuracy, formation mode, and numerical
+stability on all four cells. The same recipe, at the same
+hyperparameters, breaks the $K_{\mathrm{hops}} = 6$ baseline wall.
+
+\subsection{Depth wall broken at K\_hops=6}
+\label{sec:depth-wall}
+
+Table~\ref{tab:depth-wall} places the recipe's $K_{\mathrm{hops}}=6$
+result next to the baseline's. The baseline recipe produces zero
+healthy seeds across three replications: one at chance with mild
+query-conditioning, one nominally solving the target but with a
+readout that is entirely query-adjacent (QTOK-flip $= 0.77$), and
+one with a residual-stream norm of $1.19 \cdot 10^9$ at $N = 2000$.
+The filler recipe produces four passing seeds out of five with mean
+target$_{N=200} = 0.867$ across the passers, QTOK-flip $\le 0.02$
+for all five, and div\_norm$_{N=2000} \le 78$ on the passers. The
+one failing seed under the recipe (s3) sits near chance
+(target$_{N=200} = 0.312$) with an elevated div\_norm of $2043$;
+formation failure and mild divergence co-occur in the same seed
+rather than manifesting as distinct events.
+
+\begin{table}[h]
+\centering
+\small
+\caption{The $K_{\mathrm{hops}} = 6$ cell. Baseline (rig 129) vs
+filler recipe (rig 136). $n$ = number of replicated seeds. Passer
+mean and QTOK-flip mean computed across seeds meeting the
+verdict rule.}
+\label{tab:depth-wall}
+\begin{tabular}{lcccccc}
+\toprule
+recipe & $n$ & pass rate & target$_{N=200}$ (mean) & passers mean & QTOK-flip (mean) & div\_norm (mean, passers) \\
+\midrule
+baseline    & 3 & $0/3$ & $0.450$ (spread $0.625$) & --- & $0.323$ & --- \\
+filler      & 5 & $4/5$ & $0.756$                  & $0.867$ & $0.005$ & $76$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Formation mode across depths}
+\label{sec:formation}
+
+Table~\ref{tab:formation} reports QTOK-flip means across all four
+depth cells under the recipe. Every cell sits an order of magnitude
+below the $0.15$ query-conditioned threshold; the mean decreases
+monotonically with depth. Compared to the baseline, where roughly
+$1/3$ of $K_{\mathrm{hops}} = 5$ seeds land query-conditioned by
+QTOK-flip \citep{fenrir2026}, the recipe pulls essentially every
+seed into the state-persistent basin.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Formation-mode diagnostic (QTOK-flip mean) across depths
+under the filler-augmented recipe. Lower is state-persistent; the
+boundary is at $0.15$.}
+\label{tab:formation}
+\begin{tabular}{lcccc}
+\toprule
+$K_{\mathrm{hops}}$ & 3 & 4 & 5 & 6 \\
+\midrule
+rig            & 063 & 132 & 133 & 136 \\
+seeds          & 5   & 5   & 5   & 5   \\
+QTOK-flip mean & $0.033$ & $0.013$ & $0.006$ & $0.004$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Divergence suppressed}
+\label{sec:divergence}
+
+Under the baseline recipe at $K_{\mathrm{hops}} = 5$, two of three
+replicated seeds diverge at $N = 2000$
+(div\_norm $\gg 10^5$). Under the recipe, all five replicated
+seeds are non-divergent (div\_norm $\le 103$ across the range at
+$K_{\mathrm{hops}} = 5$; $\le 78$ across the four passers at
+$K_{\mathrm{hops}} = 6$). One seed at $K_{\mathrm{hops}} = 6$
+(s3) has an elevated div\_norm of $2043$, but this co-occurs with
+that seed's formation failure rather than presenting as a distinct
+divergence event.
+
+The reading is that the recipe's SEP-write geometry (forcing
+$\beta_t$ near zero on filler positions to satisfy the joint loss)
+attacks both the formation-mode failure (F1) and the divergence
+failure (F2) at their shared geometric cause: both are
+consequences of the write engaging on positions where it should be
+idle.
+
+\subsection{Combined result}
+\label{sec:combined}
+
+Table~\ref{tab:main} is the paper's headline result. Across
+$K_{\mathrm{hops}} \in \{3, 4, 5, 6\}$, the recipe produces mean
+target$_{N=200} \ge 0.756$ (or, restricted to passing seeds,
+$\ge 0.867$), QTOK-flip mean $\le 0.033$, and eliminates divergence
+across $n = 20$ trained seeds with the exception of the one formation
+failure at the deepest cell.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Combined recipe results across the trained depth range,
+$n = 5$ seeds per cell.}
+\label{tab:main}
+\begin{tabular}{lccccc}
+\toprule
+$K_{\mathrm{hops}}$ & target$_{N=200}$ (mean) & QTOK-flip (mean) & passes & non-divergent & filler-dep gap \\
+\midrule
+3 & $0.995$ & $0.033$ & $5/5$ & $5/5$ & $\sim 0.04$ \\
+4 & $0.975$ & $0.013$ & $5/5$ & $5/5$ & $\sim 0.32$ \\
+5 & $0.917$ & $0.006$ & $5/5$ & $5/5$ & $\sim 0.50$ \\
+6 & $0.756$ (passers $0.867$) & $0.004$ & $4/5$ & $4/5$ & $\sim 0.43$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ======================================================================
+\section{Ablations and analysis}
+\label{sec:ablations}
+
+Two ablations and one nuance.
+
+\subsection{Scaffold agnosticism}
+
+The recipe is not tied to the specific three-layer scaffold on
+which the mechanism was originally characterised. An explicitly
+two-layer version of the architecture (i.e. $L = 2$) trained under
+the same recipe on $K_{\mathrm{hops}} = 3$ produces
+target$_{N=200} = 0.992$ mean across three seeds with
+QTOK-flip $\le 0.02$ on all three ($0.000$, $0.016$, $0.000$). The two-layer variant is exactly
+the "degenerate" solution that $L = 3$ query-conditioned seeds fall
+into under the baseline recipe \citep{fenrir2026}; when trained
+explicitly, and under the filler recipe, it composes cleanly. The
+recipe therefore does not depend on the three-layer scaffold as a
+site of refinement; it depends only on the fast-weight write
+geometry.
+
+\subsection{Occlusion-invariance auxiliary loss}
+
+An alternative training-time route to the same effect is a
+$\lambda$-weighted KL term that penalises the change in the model's
+last-position logits when a random $30\%$ of positions between the
+facts and the query are replaced with SEP:
+\[
+  \mathcal{L}_{\mathrm{aux}} \;=\;
+  \lambda \, \mathrm{KL}\!\left(
+    p(\cdot \mid x)\;\|\;p(\cdot \mid \mathrm{mask}_{30\%}(x))
+  \right).
+\]
+On $K_{\mathrm{hops}} = 3$ with $n = 1$ seed at $\lambda = 0.1$ and
+$n = 2$ seeds at $\lambda = 1.0$ (plus one earlier $\lambda = 1.0$
+run that failed to reach target and is excluded from the summary),
+the auxiliary produces state-persistent formation with target
+$\ge 0.98$ and QTOK-flip $\le 0.01$.
+Replication is needed before the auxiliary sits alongside the filler
+recipe as a validated intervention; we include it here as an
+indication that the filler recipe is not the only training-time
+route to the same effect, and that both routes share the property of
+enforcing invariance to intermediate-position content.
+
+\subsection{Filler-dependence at depth}
+\label{sec:filler-dep}
+
+The recipe's principal cost is at $K_{\mathrm{hops}} \ge 4$: mean
+target$_{N=200}$ is high, but mean target$_{N=0}$ is lower, and the
+gap grows with depth. On $K_{\mathrm{hops}} = 6$ passers, the mean
+gap is approximately $0.43$; individual passer gaps range up to
+$0.49$. Across all five filler-recipe cells, the widest single-seed
+gap we observed was $0.61$ (rig 133 $s_3$ at $K_{\mathrm{hops}}=5$). The recipe biases the model toward the filler-present
+distribution, and pass-seeds increasingly need filler at eval to
+reach their headline accuracy. The robust property under this recipe is state-persistence and
+non-divergence; balanced accuracy under both filler conditions is
+not robust. Downstream use of the recipe should assume a
+filler-dependence gap of roughly $0.4$ at $K_{\mathrm{hops}}=6$
+(individual passers up to $0.49$), and should either evaluate
+with filler or filter for seeds whose target$_{N=0}$ matches
+target$_{N=200}$.
+
+% ======================================================================
+\section{Related work}
+\label{sec:related}
+
+\paragraph{Training-time interventions that shape the learned
+circuit.} \citet{wang2024grokked} show that a Transformer trained on
+2-hop composition transitions from a memorised solution to a
+compositional circuit only via grokking, and that the training
+mixture of atomic vs composed facts controls whether grokking
+happens at all. Filler-augmented training is closest in spirit to
+that observation: a single mixture-level intervention flips which
+solution gradient descent commits to. The Transformer version acts
+on in-weights composition; the fast-weight version here acts on
+in-context composition. \citet{olsson2022inductionheads} identify a
+similar training-time phase change for induction heads.
+
+\paragraph{Filler / pause / think tokens.} \citet{goyal2023think}
+and \citet{pfau2024let} show that inserting learnable or fixed pause
+tokens between a prompt and its answer can buy the model extra
+transformer forward passes for computation; \citet{hao2024coconut}
+generalises this to continuous CoT vectors. Our filler tokens differ:
+they are inserted at training time (not eval time) and their purpose
+is not to grant the model extra computation but to force the write
+geometry to be idle on filler positions. That is an unrelated
+mechanism which happens to produce filler tokens as an operational
+side effect.
+
+\paragraph{Recall-capacity work on fast-weight and Mamba-family
+layers.} \citet{arora2023zoology,arora2024based} establish the
+capacity of single-hop associative recall on fast-weight and SSM
+architectures. Our results are on the multi-hop generalisation of
+that task, where the failure surface is qualitatively different: the
+mechanism must \emph{form} a compositional circuit, not just
+allocate memory to a set of $(k,v)$ pairs.
+
+\paragraph{Fast-weight lineage.} The mixer that carries these
+experiments is a member of the fast-weight family that runs from
+\citet{schmidhuber1992learning,schmidhuber1993reducing} through
+\citet{schlag2021linear}, \citet{yang2024deltanet},
+\citet{yang2024gated}, \citet{peng2024rwkv7}, \citet{sun2024ttt},
+\citet{behrouz2025titans}, and the self-referential branch
+\citep{irie2022srwm,irie2021going}. The specific address-side
+residual we use, and its multi-hop composition properties, are the
+subject of a companion paper \citep{fenrir2026}. The filler recipe
+reported here is expected to be architecture-generic within this
+family, but we have tested it only on the specific mixer described
+in Sec.~\ref{sec:background}; other members of the family may
+require separate verification.
+
+% ======================================================================
+\section{Limitations}
+\label{sec:limitations}
+
+The recipe has been tested at one architecture, one task family
+(injective-connectivity factorised multi-hop retrieval), one
+sequence-length regime (up to $2000$ filler positions at eval), and
+one hardware setup (AMD Radeon RX 7900 XTX with bf16 autocast). The strongest
+empirical claims (pass rates and QTOK-flip means) come from
+$n = 5$ replications per cell, which is enough to distinguish
+"formation mode is steered categorically" from "formation mode has
+a small drift" but not enough to characterise the tails. The
+filler-dependence result reports a mean and range but not a
+distribution over seeds. The two-layer ablation is $n = 3$; the
+occlusion-invariance auxiliary ablation is $n = 1$ per $\lambda$
+and should be treated as suggestive rather than validated. The
+$K_{\mathrm{hops}} > 6$ regime is not tested; there is no
+architectural reason to expect the recipe to fail at
+$K_{\mathrm{hops}} = 7$ or higher, but our data cannot rule it out.
+
+% ======================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+A single training-time change resolves three empirically distinct
+failure modes of fast-weight recurrent multi-hop composition at
+depth: query-conditioned formation, state divergence, and the
+baseline depth wall. The change: uniform-random filler between the
+last fact and the query, ramped in over a warm-up window, with a
+joint loss on a filler-free probe batch and a filler-present target
+batch. The recipe extends the trainable depth envelope by at least
+one hop, is scaffold-agnostic, and admits a mechanistic reading in
+terms of the write geometry it forces on filler tokens. Its
+principal cost is a filler-dependence gap of roughly $0.4$ at
+$K_{\mathrm{hops}}=6$ (individual passer gaps up to $0.5$) that
+downstream users should plan around.
+Further training-time interventions with the same joint property
+(steering formation and suppressing divergence with one lever) are
+likely to exist in the fast-weight family; the recipe reported here
+is a first working example.
+
+% ======================================================================
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

@@ -1,0 +1,210 @@
+%%
+%% References for the filler-training paper.
+%%
+
+% ============================================================
+% Fast-weight lineage
+% ============================================================
+
+@article{schmidhuber1992learning,
+    title   = {Learning to control fast-weight memories: An alternative to dynamic recurrent networks},
+    author  = {Schmidhuber, J{\"u}rgen},
+    journal = {Neural Computation},
+    volume  = {4},
+    number  = {1},
+    pages   = {131--139},
+    year    = {1992},
+}
+
+@article{schmidhuber1993reducing,
+    title   = {Reducing the ratio between learning complexity and number of time varying variables in fully recurrent nets},
+    author  = {Schmidhuber, J{\"u}rgen},
+    journal = {International Conference on Artificial Neural Networks},
+    year    = {1993},
+}
+
+@inproceedings{schlag2021linear,
+    title     = {Linear Transformers Are Secretly Fast Weight Programmers},
+    author    = {Schlag, Imanol and Irie, Kazuki and Schmidhuber, J{\"u}rgen},
+    booktitle = {International Conference on Machine Learning},
+    year      = {2021},
+}
+
+@misc{irie2021going,
+    title         = {Going Beyond Linear Transformers with Recurrent Fast Weight Programmers},
+    author        = {Irie, Kazuki and Schlag, Imanol and Cs{\'o}rd{\'a}s, R{\'o}bert and Schmidhuber, J{\"u}rgen},
+    year          = {2021},
+    eprint        = {2106.06295},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+@inproceedings{irie2022srwm,
+    title     = {A Modern Self-Referential Weight Matrix That Learns to Modify Itself},
+    author    = {Irie, Kazuki and Schlag, Imanol and Cs{\'o}rd{\'a}s, R{\'o}bert and Schmidhuber, J{\"u}rgen},
+    booktitle = {International Conference on Machine Learning},
+    year      = {2022},
+    note      = {arXiv:2202.05780},
+}
+
+@misc{yang2024deltanet,
+    title         = {Parallelizing Linear Transformers with the Delta Rule over Sequence Length},
+    author        = {Yang, Songlin and Wang, Bailin and Zhang, Yu and Kim, Yoon},
+    year          = {2024},
+    eprint        = {2406.06484},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+@misc{yang2024gated,
+    title         = {Gated Delta Networks: Improving Mamba2 with Delta Rule},
+    author        = {Yang, Songlin and Kautz, Jan and Hatamizadeh, Ali},
+    year          = {2024},
+    eprint        = {2412.06464},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+@misc{peng2024rwkv7,
+    title         = {RWKV-7 "Goose" with Expressive Dynamic State Evolution},
+    author        = {Peng, Bo and Zhang, Ruichong and Goldstein, Daniel and Alcaide, Eric and Du, Xingjian and Ferdinan, Teddy and Hou, Haowen and Kazienko, Przemys{\l}aw and GV, Kranthi Kiran and Koc{\'o}n, Jan and Others},
+    year          = {2025},
+    eprint        = {2503.14456},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+@misc{sun2024ttt,
+    title         = {Learning to (Learn at Test Time): {RNN}s with Expressive Hidden States},
+    author        = {Sun, Yu and Li, Xinhao and Dalal, Karan and Xu, Jiarui and Vikram, Arjun and Zhang, Genghan and Dubois, Yann and Chen, Xinlei and Wang, Xiaolong and Koyejo, Sanmi and Hashimoto, Tatsunori and Guestrin, Carlos},
+    year          = {2024},
+    eprint        = {2407.04620},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+@misc{behrouz2025titans,
+    title         = {Titans: Learning to Memorize at Test Time},
+    author        = {Behrouz, Ali and Zhong, Peilin and Mirrokni, Vahab},
+    year          = {2025},
+    eprint        = {2501.00663},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+% ============================================================
+% Mamba / state-space
+% ============================================================
+
+@misc{gu2024mamba,
+    title         = {Mamba: Linear-Time Sequence Modeling with Selective State Spaces},
+    author        = {Gu, Albert and Dao, Tri},
+    year          = {2024},
+    eprint        = {2312.00752},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+@misc{dao2024mamba2,
+    title         = {Transformers are {SSM}s: Generalized Models and Efficient Algorithms Through Structured State Space Duality},
+    author        = {Dao, Tri and Gu, Albert},
+    year          = {2024},
+    eprint        = {2405.21060},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+% ============================================================
+% Recall-capacity and MQAR
+% ============================================================
+
+@misc{arora2023zoology,
+    title         = {Zoology: Measuring and Improving Recall in Efficient Language Models},
+    author        = {Arora, Simran and Eyuboglu, Sabri and Timalsina, Aman and Johnson, Isys and Poli, Michael and Zou, James and Rudra, Atri and R{\'e}, Christopher},
+    year          = {2023},
+    eprint        = {2312.04927},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+@misc{arora2024based,
+    title         = {Simple linear attention language models balance the recall-throughput tradeoff},
+    author        = {Arora, Simran and Eyuboglu, Sabri and Zhang, Michael and Timalsina, Aman and Alberti, Silas and Zinsley, Dylan and Zou, James and Rudra, Atri and R{\'e}, Christopher},
+    year          = {2024},
+    eprint        = {2402.18668},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+% ============================================================
+% Circuit formation / training-time interventions
+% ============================================================
+
+@misc{wang2024grokked,
+    title         = {Grokked Transformers are Implicit Reasoners: A Mechanistic Journey to the Edge of Generalization},
+    author        = {Wang, Boshi and Yue, Xiang and Su, Yu and Sun, Huan},
+    year          = {2024},
+    eprint        = {2405.15071},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+@misc{olsson2022inductionheads,
+    title         = {In-context Learning and Induction Heads},
+    author        = {Olsson, Catherine and Elhage, Nelson and Nanda, Neel and Joseph, Nicholas and DasSarma, Nova and Henighan, Tom and Mann, Ben and Askell, Amanda and Bai, Yuntao and Chen, Anna and Others},
+    year          = {2022},
+    eprint        = {2209.11895},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+@misc{liu2023towards,
+    title         = {Towards Understanding Grokking: An Effective Theory of Representation Learning},
+    author        = {Liu, Ziming and Kitouni, Ouail and Nolte, Niklas and Michaud, Eric and Tegmark, Max and Williams, Mike},
+    year          = {2023},
+    eprint        = {2205.10343},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.LG},
+}
+
+% ============================================================
+% Pause / think / continuous-CoT tokens
+% ============================================================
+
+@misc{goyal2023think,
+    title         = {Think before you speak: Training Language Models With Pause Tokens},
+    author        = {Goyal, Sachin and Ji, Ziwei and Rawat, Ankit Singh and Menon, Aditya Krishna and Kumar, Sanjiv and Nagarajan, Vaishnavh},
+    year          = {2023},
+    eprint        = {2310.02226},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.CL},
+}
+
+@misc{pfau2024let,
+    title         = {Let's Think Dot by Dot: Hidden Computation in Transformer Language Models},
+    author        = {Pfau, Jacob and Merrill, William and Bowman, Samuel R.},
+    year          = {2024},
+    eprint        = {2404.15758},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.CL},
+}
+
+@misc{hao2024coconut,
+    title         = {Training Large Language Models to Reason in a Continuous Latent Space},
+    author        = {Hao, Shibo and Sukhbaatar, Sainbayar and Su, DiJia and Li, Xian and Hu, Zhiting and Weston, Jason and Tian, Yuandong},
+    year          = {2024},
+    eprint        = {2412.06769},
+    archivePrefix = {arXiv},
+    primaryClass  = {cs.CL},
+}
+
+% ============================================================
+% Companion / project-internal
+% ============================================================
+
+@misc{fenrir2026,
+    title  = {{FENRIR}: chunk-parallel address-perturbation fast weights for multi-hop associative composition},
+    author = {Voidwolf},
+    year   = {2026},
+    note   = {Companion paper (in preparation).},
+}

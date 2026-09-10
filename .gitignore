@@ -14,6 +14,11 @@ env/
 *.pt
 *.log
 
+# Chapter 3 (filler) regenerates its results; the headline numbers live in
+# filler/README.md, so its result JSONs are not committed.
+filler/results/*
+!filler/results/.gitkeep
+
 # LaTeX build artifacts (the compiled paper/main.pdf IS committed)
 paper/main.log
 paper/main.aux

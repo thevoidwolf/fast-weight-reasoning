@@ -124,6 +124,6 @@ hardware (bf16 plus non-associative reductions are not bit-identical), but
 accuracy holds within seed-to-seed noise. Reference hardware: NVIDIA RTX 5090.
 
 One cross-reference to head off confusion: the paper's abstract mentions a
-six-hop result "under a training-time filler recipe (paper 03 in this series)."
-That filler-training work is a separate line and is not included in this repo.
-Everything here is the baseline recipe.
+six-hop result "under a training-time filler recipe." That filler recipe is
+chapter 3 of this repo (see [`../filler/`](../filler/)); everything in *this*
+chapter is the baseline recipe.
